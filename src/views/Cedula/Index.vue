@@ -1,14 +1,20 @@
 <template>
   <v-container>
     <v-row>
-      <v-col offset="4"
-        ><v-btn dark class="black my-4">Registrar Nuevo Vehículo</v-btn></v-col
-      >
+      <v-col offset="4">
+        <v-btn dark class="black my-4" @click="registerVehicle"
+          >Registrar Nuevo Vehículo</v-btn
+        >
+      </v-col>
     </v-row>
-
-    <h1>Carros</h1>
+    <h1 class="mb-2">
+      Vehículos de {{ employee.nombre }} {{ employee.apellido }} cc.{{
+        employee.cedula
+      }}
+    </h1>
+    <h2>Carros</h2>
     <v-row dense>
-      <v-col v-for="(carro, i) in carros" :key="i" cols="12">
+      <v-col v-for="(carro, i) in employee.carros" :key="i" cols="12">
         <v-card color="#F4F4F4">
           <div class="d-flex flex-no-wrap justify-space-between">
             <div>
@@ -28,15 +34,17 @@
             </v-avatar>
           </div>
           <v-card-actions>
-            <v-btn dark color="black">Ingresar</v-btn>
+            <v-btn dark color="black" @click="showVehicle(carro.placa)"
+              >Ingresar</v-btn
+            >
           </v-card-actions>
         </v-card>
       </v-col>
     </v-row>
     <br />
-    <h1>Motos</h1>
+    <h2>Motos</h2>
     <v-row dense>
-      <v-col v-for="(moto, i) in motos" :key="i" cols="12">
+      <v-col v-for="(moto, i) in employee.motos" :key="i" cols="12">
         <v-card color="#F4F4F4">
           <div class="d-flex flex-no-wrap justify-space-between">
             <div>
@@ -47,7 +55,7 @@
               <v-card-text>
                 Cilindraje: {{ moto.cilindraje }}cc
                 <br />
-                Tiempos: {{ moto.tiempos }}T
+                Tiempos: {{ moto.tiempos }}
               </v-card-text>
             </div>
 
@@ -56,7 +64,9 @@
             </v-avatar>
           </div>
           <v-card-actions>
-            <v-btn dark color="black">Ingresar</v-btn>
+            <v-btn dark color="black" @click="showVehicle(moto.placa)"
+              >Ingresar</v-btn
+            >
           </v-card-actions>
         </v-card>
       </v-col>
@@ -65,31 +75,32 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "Cedula",
-  data: () => ({
-    carros: [
-      {
-        imagen: "https://cdn.vuetifyjs.com/images/cards/foster.jpg",
-        placa: "FHA452",
-        modelo: "Foster the People",
-        puertas: "4"
-      },
-      {
-        imagen: "https://cdn.vuetifyjs.com/images/cards/foster.jpg",
-        placa: "FHA452",
-        modelo: "Foster the People",
-        puertas: "4"
-      }
-    ],
-    motos: [
-      {
-        cilindraje: "300",
-        tiempos: "4",
-        placa: "FTN456",
-        imagen: "https://cdn.vuetifyjs.com/images/cards/foster.jpg"
-      }
-    ]
-  })
+  data: () => ({}),
+  computed: {
+    ...mapState({
+      employees: state => state.employees
+    }),
+    employee() {
+      const { cedula } = this.$route.params;
+      const employee = this.employees.employees.find(
+        employee => employee.cedula == cedula
+      );
+      return employee;
+    }
+  },
+  methods: {
+    registerVehicle() {
+      this.$router.push({ name: "Register" });
+    },
+    showVehicle(placa) {
+      this.$router.push({
+        name: "Vehicle",
+        params: { cedula: this.employee.cedula, placa: placa }
+      });
+    }
+  }
 };
 </script>

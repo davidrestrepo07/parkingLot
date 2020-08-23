@@ -1,12 +1,13 @@
 <template>
   <div class="container">
+    <v-row><v-icon v-text="platform"></v-icon></v-row>
     <v-row>
       <v-col cols="12" md="6">
         <template>
           <v-card class="mx-auto" max-width="344">
             <v-img
               class="white--text align-end"
-              height="200px"
+              height="300px"
               src="https://www.comparaonline.com.co/blog-statics/co/uploads/2016/08/parqueadero-publico-1.jpg"
             />
             <v-card-text class="bg-black">
@@ -18,7 +19,7 @@
               </div>
             </v-card-text>
             <v-card-actions>
-              <v-btn color="black" dark>Ingreso</v-btn>
+              <v-btn color="black" dark @click="In()">Ingreso</v-btn>
             </v-card-actions>
           </v-card>
         </template>
@@ -29,8 +30,8 @@
           <v-card class="mx-auto" max-width="344">
             <v-img
               class="white--text align-end"
-              height="200px"
-              src="https://www.upsistemasyredes.net/wp-content/uploads/2018/08/accesoveh.jpg"
+              height="300px"
+              src="https://www.aradock.es/wp-content/uploads/2019/05/sistema-control-acceso-barreras.jpg"
             />
             <v-card-text class="bg-black">
               <h1 class="display-1 text--primary">Salida de Vehículo</h1>
@@ -40,7 +41,7 @@
               </div>
             </v-card-text>
             <v-card-actions>
-              <v-btn color="black" dark>Salida</v-btn>
+              <v-btn color="black" dark @click="Out()">Salida</v-btn>
             </v-card-actions>
           </v-card>
         </template>
@@ -54,6 +55,14 @@
 
 export default {
   name: "Home",
-  components: {}
+  components: {},
+  methods: {
+    In() {
+      this.$router.push({ name: "InVehicle" });
+    },
+    Out() {
+      this.$router.push({ name: "OutVehicle" });
+    }
+  }
 };
 </script>

@@ -31,13 +31,19 @@ const routes = [
       import(/* webpackChunkName: "Worker" */ "../views/Worker/Index.vue")
   },
   {
+    path: "/visitante",
+    name: "Visitor",
+    component: () =>
+      import(/* webpackChunkName: "Visitor" */ "../views/Visitor/Index.vue")
+  },
+  {
     path: "/empleado/:cedula",
     name: "Cedula",
     component: () =>
       import(/* webpackChunkName: "Cedula" */ "../views/Cedula/Index.vue")
   },
   {
-    path: "/vehiculo/:placa",
+    path: "/vehiculo/:cedula/:placa",
     name: "Vehicle",
     component: () =>
       import(/* webpackChunkName: "Vehicle" */ "../views/Vehicle/Index.vue")
@@ -51,24 +57,10 @@ const routes = [
       )
   },
   {
-    path: "/salida/:placa",
-    name: "Charge",
-    component: () =>
-      import(/* webpackChunkName: "Charge" */ "../views/Charge/Index.vue")
-  },
-  {
     path: "/informes",
     name: "Informes",
     component: () =>
       import(/* webpackChunkName: "Informes" */ "../views/Informes/Index.vue")
-  },
-  {
-    path: "/tabla/:año/:mes",
-    name: "InformTable",
-    component: () =>
-      import(
-        /* webpackChunkName: "InformTable" */ "../views/InformTable/Index.vue"
-      )
   },
   {
     path: "/registrar",

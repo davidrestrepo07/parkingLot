@@ -13,11 +13,11 @@
               <h1 class="display-1 text--primary">Empleado</h1>
               <br />
               <div class="text--primary">
-                Ingreso de vehículo de empleado de Mattelsa
+                Ingreso de vehículo empleado de Mattelsa
               </div>
             </v-card-text>
             <v-card-actions>
-              <v-btn color="black" dark>Ingreso</v-btn>
+              <v-btn color="black" dark @click="employee()">Ingreso</v-btn>
             </v-card-actions>
           </v-card>
         </template>
@@ -35,11 +35,11 @@
               <h1 class="display-1 text--primary">Visitante</h1>
               <br />
               <div class="text--primary">
-                Ingreso de vehículo de visitante
+                Ingreso de vehículo de visitante a Mattelsa
               </div>
             </v-card-text>
             <v-card-actions>
-              <v-btn color="black" dark>Ingreso</v-btn>
+              <v-btn color="black" dark @click="visitor()">Ingreso</v-btn>
             </v-card-actions>
           </v-card>
         </template>
@@ -53,6 +53,14 @@
 
 export default {
   name: "InVehicle",
-  components: {}
+  components: {},
+  methods: {
+    employee() {
+      this.$router.push({ name: "Worker" });
+    },
+    visitor() {
+      this.$router.push({ name: "Visitor" });
+    }
+  }
 };
 </script>
