@@ -9,22 +9,16 @@
           <v-select
             v-model="selectMonth"
             :items="Object.keys(month)"
-            :error-messages="selectErrors"
             label="Mes"
             required
-            @change="$v.select.$touch()"
-            @blur="$v.select.$touch()"
           ></v-select>
         </v-col>
         <v-col>
           <v-select
             v-model="selectYear"
             :items="year"
-            :error-messages="selectErrors"
             label="Año"
             required
-            @change="$v.select.$touch()"
-            @blur="$v.select.$touch()"
           ></v-select>
         </v-col>
       </v-row>
@@ -58,7 +52,7 @@ export default {
         Noviembre: "11",
         Diciembre: "12"
       },
-      year: [2015, 2016, 2017, 2018, 2019, "2020"],
+      year: ["2015", "2016", "2017", "2018", "2019", "2020"],
       selectMonth: "",
       selectYear: ""
     };

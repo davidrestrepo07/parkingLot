@@ -9,7 +9,7 @@ export default {
         carros: [
           {
             modelo: "2009",
-            placa: "FH3456",
+            placa: "FHE456",
             puertas: "4",
             imagen:
               "https://api.ferrarinetwork.ferrari.com/v2/network-content/medias/resize/5dd55c230cf6995f44de91fd-line-up-ferrari-portofino?apikey=9QscUiwr5n0NhOuQb463QEKghPrVlpaF&width=800&height=600"
@@ -105,12 +105,12 @@ export default {
   },
 
   mutations: {
-    editVehicles(state, data) {
-      //buscar el indice del producto
+    EDIT_VEHICLES(state, data) {
+      //buscar la cedula del empleado
       const index = state.employees.findIndex(
         employee => employee.cedula === data.cedula
       );
-
+      //ver si el nuevo vehiculo es un carro
       if (data.isVehicle == "1") {
         const newVehicle = {
           modelo: data.modelo,
@@ -120,7 +120,9 @@ export default {
             "https://api.ferrarinetwork.ferrari.com/v2/network-content/medias/resize/5dd55c230cf6995f44de91fd-line-up-ferrari-portofino?apikey=9QscUiwr5n0NhOuQb463QEKghPrVlpaF&width=800&height=600"
         };
         state.employees[index].carros.push(newVehicle);
-      } else {
+      }
+      //si no es una moto
+      else {
         const newVehicle = {
           cilindraje: data.cilindraje,
           placa: data.placa,

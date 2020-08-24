@@ -1,5 +1,5 @@
 <template>
-  <v-form ref="form" v-model="valid" lazy-validation>
+  <v-form ref="form" lazy-validation @submit.prevent="editVehicle">
     <v-text-field
       v-model="cedula"
       :counter="10"
@@ -31,9 +31,9 @@
     <v-file-input
       label="Foto del carro"
       filled
+      v-model="imagen"
       prepend-icon="mdi-camera"
       accept="image/png, image/jpeg, image/bmp"
-      v-model="imagen"
       :rules="[v => !!v || 'Este campo es requerido']"
     ></v-file-input>
 
@@ -46,12 +46,13 @@
 </template>
 
 <script>
-// import { mapMutations } from "vuex";
+import { mapState } from "vuex";
 export default {
   name: "FormCar",
   data() {
     return {
       cedula: "",
+      imagen: null,
       cedulaRules: [
         v => !!v || "Este campo es requerido",
         v => (v && v.length <= 10) || "La cédula tiene máximo 10 dígitos",
@@ -66,36 +67,54 @@ export default {
       modelo: "",
       modeloRules: [
         v => !!v || "Este campo es requerido",
-        v => (v && v.length <= 4) || "El modelo tiene máximo 4 dígitos",
+        v => (v && v.length == 4) || "El modelo tiene 4 dígitos",
         v => /^[0-9]+$/.test(v) || "El modelo debe de contener solo números"
       ],
       puertas: "",
       puertasRules: [
         v => !!v || "Este campo es requerido",
-        v => (v && v.length <= 1) || "La cédula tiene máximo 1 dígito",
+        v => (v && v.length == 1) || "Debe contener 1 dígito",
         v => /^[0-9]+$/.test(v) || "Debe de contener solo números"
       ],
-      imagen: "",
+
       isVehicle: "1"
     };
   },
+  computed: {
+    ...mapState({
+      employees: state => state.employees
+    })
+  },
   methods: {
     editVehicle() {
+      const employee = this.employees.employees.find(
+        employee => employee.cedula == this.cedula
+      );
       if (this.$refs.form.validate()) {
-        alert(
-          "Se ha registrado correctamente el vehículo a la cédula " +
-            this.cedula
-        );
-        const state = {
-          cedula: this.cedula,
-          placa: this.placa,
-          modelo: this.modelo,
-          puertas: this.puertas,
-          isVehicle: this.isVehicle
-        };
-        this.$store.commit("editVehicles", state);
-        const cedula = this.cedula;
-        this.$router.push({ name: "Cedula", params: { cedula } });
+        if (employee != undefined) {
+          //si se guardara la imagen aca guardariamos el nombre de la imagen para luego buscarla en la base de datos
+          // const imagenName=this.imagen.name
+          alert(
+            "Se ha registrado correctamente el vehículo a la cédula " +
+              this.cedula
+          );
+          const state = {
+            cedula: this.cedula,
+            placa: this.placa,
+            modelo: this.modelo,
+            puertas: this.puertas,
+            isVehicle: this.isVehicle
+            //si hubiera base de datos
+            //imagen:imagenName
+          };
+          this.$store.commit("EDIT_VEHICLES", state);
+          const cedula = this.cedula;
+          this.$router.push({ name: "Cedula", params: { cedula } });
+        } else {
+          alert(
+            "Esta cédula no está registrada en la base de datos de empleados"
+          );
+        }
       }
     },
     clear() {

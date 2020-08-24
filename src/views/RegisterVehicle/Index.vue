@@ -3,7 +3,7 @@
     <v-select
       v-model="select"
       :items="items"
-      :rules="[v => !!v || 'Item is required']"
+      :rules="[v => !!v || 'Este campo es requerido']"
       label="Vehículo"
       required
     ></v-select>

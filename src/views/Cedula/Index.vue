@@ -80,10 +80,12 @@ export default {
   name: "Cedula",
   data: () => ({}),
   computed: {
+    //se obtiene los empleados del store
     ...mapState({
       employees: state => state.employees
     }),
     employee() {
+      //obtener la cedula del empleado y su info
       const { cedula } = this.$route.params;
       const employee = this.employees.employees.find(
         employee => employee.cedula == cedula
@@ -93,9 +95,11 @@ export default {
   },
   methods: {
     registerVehicle() {
+      //ir a la ruta para registrar al vehiculo
       this.$router.push({ name: "Register" });
     },
     showVehicle(placa) {
+      //mostrar el vehiculo para su ingreso al parqueadero
       this.$router.push({
         name: "Vehicle",
         params: { cedula: this.employee.cedula, placa: placa }

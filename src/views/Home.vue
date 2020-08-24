@@ -1,6 +1,10 @@
 <template>
   <div class="container">
-    <v-row><v-icon v-text="platform"></v-icon></v-row>
+    <v-row class="justify-center my-5">
+      <v-btn color="black" dark @click="parkingLot()"
+        >Ver vehículos en el parqueadero</v-btn
+      >
+    </v-row>
     <v-row>
       <v-col cols="12" md="6">
         <template>
@@ -19,7 +23,7 @@
               </div>
             </v-card-text>
             <v-card-actions>
-              <v-btn color="black" dark @click="In()">Ingreso</v-btn>
+              <v-btn color="black" dark @click="inVehicle()">Ingreso</v-btn>
             </v-card-actions>
           </v-card>
         </template>
@@ -31,7 +35,7 @@
             <v-img
               class="white--text align-end"
               height="300px"
-              src="https://www.aradock.es/wp-content/uploads/2019/05/sistema-control-acceso-barreras.jpg"
+              src="https://www.solucionesyautomatizaciones.com/wp-content/uploads/2018/06/ACCESO-AUTO.jpg"
             />
             <v-card-text class="bg-black">
               <h1 class="display-1 text--primary">Salida de Vehículo</h1>
@@ -41,7 +45,7 @@
               </div>
             </v-card-text>
             <v-card-actions>
-              <v-btn color="black" dark @click="Out()">Salida</v-btn>
+              <v-btn color="black" dark @click="outVehicle()">Salida</v-btn>
             </v-card-actions>
           </v-card>
         </template>
@@ -57,11 +61,14 @@ export default {
   name: "Home",
   components: {},
   methods: {
-    In() {
+    inVehicle() {
       this.$router.push({ name: "InVehicle" });
     },
-    Out() {
+    outVehicle() {
       this.$router.push({ name: "OutVehicle" });
+    },
+    parkingLot() {
+      this.$router.push({ name: "VehiclesInParkingLot" });
     }
   }
 };

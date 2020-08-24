@@ -1,5 +1,5 @@
 <template>
-  <v-form ref="form" v-model="valid" lazy-validation>
+  <v-form ref="form" lazy-validation @submit.prevent="editVehicle">
     <v-text-field
       v-model="cedula"
       :counter="10"
@@ -34,6 +34,7 @@
       label="Foto de la moto"
       filled
       prepend-icon="mdi-camera"
+      v-model="imagen"
       accept="image/png, image/jpeg, image/bmp"
     ></v-file-input>
 
@@ -51,6 +52,7 @@ export default {
   data() {
     return {
       tiempos: ["2T", "4T"],
+      imagen: null,
       cedula: "",
       cedulaRules: [
         v => !!v || "Este campo es requerido",
@@ -77,6 +79,8 @@ export default {
   methods: {
     editVehicle() {
       if (this.$refs.form.validate()) {
+        //si se guardara la imagen aca guardariamos el nombre de la imagen para luego buscarla en la base de datos
+        // const imagenName=this.imagen.name
         alert(
           "Se ha registrado correctamente el vehículo a la cédula " +
             this.cedula
@@ -87,8 +91,10 @@ export default {
           cilindraje: this.cilindraje,
           tiempos: this.tiempo,
           isVehicle: this.isVehicle
+          //si hubiera base de datos
+          //imagen:imagenName
         };
-        this.$store.commit("editVehicles", state);
+        this.$store.commit("EDIT_VEHICLES", state);
         const cedula = this.cedula;
         this.$router.push({ name: "Cedula", params: { cedula } });
       }

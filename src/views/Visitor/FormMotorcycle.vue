@@ -1,5 +1,5 @@
 <template>
-  <v-form ref="form" v-model="valid" lazy-validation>
+  <v-form ref="form" lazy-validation @submit.prevent="onSubmit">
     <v-text-field
       v-model="cedula"
       :counter="10"
@@ -38,7 +38,7 @@
       <v-col cols="12">
         <v-text-field
           v-model="celda"
-          :rules="cedulaRules"
+          :rules="celdaRules"
           label="Celda"
           required
         ></v-text-field>
@@ -53,6 +53,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "FormMotorcycle",
   data() {
@@ -76,23 +77,44 @@ export default {
         v => /^[0-9]+$/.test(v) || "Este campo solo debe contener números",
         v => (v && v.length <= 3) || "Máximo 3 dígitos"
       ],
-      picker: new Date().toISOString().substr(0, 10),
+      picker: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+        .toISOString()
+        .substr(0, 10),
       time: null
     };
   },
+  computed: {
+    ...mapState({
+      parking: state => state.vehiclesInParkingLot
+    })
+  },
   methods: {
     onSubmit() {
+      var tzoffset = new Date().getTimezoneOffset() * 60000;
+      const today = new Date(Date.now() - tzoffset).toISOString().substr(0, 10);
+      const vehicle = this.parking.parking.filter(veh => {
+        if (veh.placa == this.placa) {
+          return true;
+        }
+      });
+      //ver si el carro ya se registró hoy en el estado del parqueadero
+      const vehicleToday = vehicle.find(vehicle => vehicle.date == today);
       if (this.$refs.form.validate()) {
-        alert("Vehículo ingresado correctamente");
-        const state = {
-          cedula: this.cedula,
-          date: this.picker,
-          perfil: "visitante",
-          vehiculo: "moto",
-          placa: this.placa
-        };
-        this.$store.commit("ENTER_VEHICLE", state);
-        this.$router.push({ name: "Home" });
+        if (vehicleToday == undefined) {
+          alert("Vehículo ingresado correctamente");
+          const state = {
+            cedula: this.cedula,
+            date: this.picker,
+            perfil: "visitante",
+            vehiculo: "moto",
+            placa: this.placa,
+            payment: "NO"
+          };
+          this.$store.commit("ENTER_VEHICLE", state);
+          this.$router.push({ name: "Home" });
+        } else {
+          alert("Este vehículo ya ingresó hoy");
+        }
       } else {
         this.validationTime = true;
       }

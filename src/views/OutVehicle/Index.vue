@@ -2,7 +2,7 @@
   <div class="container font-gotham">
     <h1>Salida de Vehículo</h1>
     <br />
-    <v-form ref="form" v-model="valid" lazy-validation>
+    <v-form ref="form" lazy-validation @submit.prevent="onSubmit">
       <v-text-field
         v-model="placa"
         :rules="placaRules"
@@ -44,13 +44,23 @@ export default {
   methods: {
     onSubmit() {
       if (this.$refs.form.validate()) {
-        const today = new Date().toISOString().substr(0, 10);
+        //ver si el vehiculo ha sido ingresado con la fecha de hoy
+        var tzoffset = new Date().getTimezoneOffset() * 60000;
+        const today = new Date(Date.now() - tzoffset)
+          .toISOString()
+          .substr(0, 10);
         const carsToday = this.parking.parking.filter(x => x.date == today);
         const findVehicleToday = carsToday.find(x => x.placa == this.placa);
-        console.log(today);
-        if (findVehicleToday != undefined) {
+
+        if (findVehicleToday != undefined && findVehicleToday.payment == "NO") {
           this.vehicle = findVehicleToday;
           this.show = true;
+        } else if (
+          findVehicleToday != undefined &&
+          findVehicleToday.payment == "SI"
+        ) {
+          alert("Este vehículo ingresó hoy pero pagó anteriormente");
+          this.$router.push({ name: "Home" });
         } else {
           alert("Este vehículo no ha ingresado hoy");
         }

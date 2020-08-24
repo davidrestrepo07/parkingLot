@@ -2,7 +2,7 @@
   <div class="container font-gotham">
     <h1>Ingreso de Vehículo empleado Mattelsa</h1>
     <br />
-    <v-form ref="form" v-model="valid" lazy-validation>
+    <v-form ref="form" lazy-validation @submit.prevent="onSubmit">
       <v-select
         v-model="select"
         :items="items"
@@ -53,23 +53,47 @@ export default {
   methods: {
     clear() {
       this.$refs.form.reset();
+      this.select = "";
     },
     onSubmit() {
       if (this.$refs.form.validate()) {
+        //buscar la cedula en el state de empleados
         if (this.select == "Cédula") {
-          const cedula = this.valor;
-          this.$router.push({ name: "Cedula", params: { cedula } });
+          const worker = this.employees.employees.find(
+            employee => employee.cedula == this.valor
+          );
+
+          if (worker == undefined) {
+            alert(
+              "Esta cédula no está registrada en la base de datos de empleados"
+            );
+          } else {
+            this.$router.push({
+              name: "Cedula",
+              params: { cedula: this.valor }
+            });
+          }
         } else {
+          //buscar la placa en el array de empleados
           const vehicle = this.employees.employees.find(
             vehicle =>
               vehicle.carros.find(vehi => vehi.placa == this.valor) !=
                 undefined ||
               vehicle.motos.find(vehi => vehi.placa == this.valor) != undefined
           );
-          this.$router.push({
-            name: "Vehicle",
-            params: { cedula: vehicle.cedula, placa: this.valor }
-          });
+          if (vehicle == undefined) {
+            alert(
+              "Esta placa no está registrada en la base de datos de empleados, serás redirigido para registrar este vehículo"
+            );
+            this.$router.push({
+              name: "Register"
+            });
+          } else {
+            this.$router.push({
+              name: "Vehicle",
+              params: { cedula: vehicle.cedula, placa: this.valor }
+            });
+          }
         }
       }
     }

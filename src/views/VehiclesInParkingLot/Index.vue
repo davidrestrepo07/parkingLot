@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-card class="mt-2">
-      <h2 class="text-center">Informe mensual</h2>
+      <h2 class="text-center">Vehículos parqueados hoy</h2>
       <v-card-title>
         <br />
         <v-text-field
@@ -13,7 +13,7 @@
       </v-card-title>
       <v-data-table
         :headers="headers"
-        :items="report"
+        :items="table"
         :search="search"
         :items-per-page="20"
         :page.sync="page"
@@ -33,17 +33,7 @@
 <script>
 import { mapState } from "vuex";
 export default {
-  name: "InformTable",
-  props: {
-    year: {
-      type: String,
-      required: true
-    },
-    month: {
-      type: String,
-      required: true
-    }
-  },
+  name: "VehiclesInParkingLot",
   data() {
     return {
       pageCount: 0,
@@ -56,9 +46,9 @@ export default {
           sortable: true,
           value: "cedula"
         },
-
+        { text: "Placa", value: "placa" },
         { text: "Perfil", value: "perfil" },
-        { text: "Uso de días del parqueadero", value: "use" }
+        { text: "Pagó", value: "payment" }
       ]
     };
   },
@@ -67,35 +57,16 @@ export default {
       //obtener todos los datos de los vehiculos parqueados
       parking: state => state.vehiclesInParkingLot
     }),
-    inform() {
-      //ver si el vehiculo parqueado es del mes y el año seleccionado
+    table() {
+      //ver todos los vehiculos que se han parqueado el dia de hoy
+      var tzoffset = new Date().getTimezoneOffset() * 60000;
+      const today = new Date(Date.now() - tzoffset).toISOString().substr(0, 10);
       const vehicles = this.parking.parking.filter(vehicle => {
-        if (
-          vehicle.date.includes(this.year) &&
-          vehicle.date.includes(this.month)
-        ) {
+        if (vehicle.date == today) {
           return true;
         }
       });
       return vehicles;
-    },
-    report() {
-      const report = [];
-      //contar si hay cedulas repetidas
-      this.inform.forEach(function(obj) {
-        let index = report.findIndex(first => first.cedula == obj.cedula);
-        if (index < 0) {
-          let added = {
-            cedula: obj.cedula,
-            perfil: obj.perfil,
-            use: 1
-          };
-          report.push(added);
-        } else {
-          report[index].use++;
-        }
-      });
-      return report;
     }
   }
 };

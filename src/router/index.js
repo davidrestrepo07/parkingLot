@@ -69,7 +69,16 @@ const routes = [
       import(
         /* webpackChunkName: "Register" */ "../views/RegisterVehicle/Index.vue"
       )
-  }
+  },
+  {
+    path: "/parqueadero-hoy",
+    name: "VehiclesInParkingLot",
+    component: () =>
+      import(
+        /* webpackChunkName: "Register" */ "../views/VehiclesInParkingLot/Index.vue"
+      )
+  },
+  { path: "*", redirect: { name: "Home" } }
 ];
 
 const router = new VueRouter({
